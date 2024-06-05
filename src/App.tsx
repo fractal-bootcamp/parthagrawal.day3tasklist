@@ -1,3 +1,5 @@
+import { useState } from "react"
+
 type TaskArray = Task[]
 
 type Task = {
@@ -39,7 +41,7 @@ const myStringLiteral = `hello world ${2 + 2} more string ${4 > 5 ? 'hello' : 'g
 
 type TaskProps = {
   task: Task
-  hello: string
+  onToggle: () => void;
 }
 
 const Task = ({ task }: TaskProps) => {
@@ -50,17 +52,20 @@ const Task = ({ task }: TaskProps) => {
 
 }
 
-const mapTaskToTaskComponent = (task: Task) => <TaskComponent task={task} />;
+// oops
+
+
 
 // NOTE: THIS COMPONENT MUST MUST MUST BE PASSED a TASK and a HELLO
-const TaskComponent = ({ task }: TaskProps) => {
+const TaskComponent = ({ task, onToggle }: TaskProps, index: number) => {
 
   return (
-    <div aria-label={myStringLiteral} className={`${task.completed ? 'bg-green-500 border-green-500' : 'bg-white'} p-3 border border-solid flex flex-col`}>
-      <div>
+    <div className={`${task.completed ? 'bg-green-500 border-green-500' : 'bg-white'} p-3 border border-solid flex flex-col`}>
+      <div onClick={() => console.log(task.completed)}>
+
         {task.title}
       </div>
-      <div>
+      <div onClick={onToggle}>
         {task.description}
       </div>
 
@@ -74,10 +79,28 @@ const TaskComponent = ({ task }: TaskProps) => {
 
 function TaskList() {
 
+  const [tasks, setTasks] = useState(initialTasks);
+
+
+  const mapTaskToTaskComponent = (task: Task, index: number) => {
+    function updateTask(updateIdx: number) {
+      const oldTask = tasks[updateIdx]
+      debugger;
+      const newTask = { ...oldTask, completed: !oldTask.completed }
+
+      // create a new array to hold updated tasks
+      const newTasks = tasks.map((task, taskIndex) => index === taskIndex ? newTask : task)
+
+      // update state of the tasks arrray
+      setTasks(newTasks)
+
+    }
+    return <TaskComponent task={task} onToggle={() => { updateTask(index) }} />
+  }
 
   return (
     <div className="bg-red-500">
-      {initialTasks.map(mapTaskToTaskComponent)}
+      {tasks.map(mapTaskToTaskComponent)}
     </div >
   )
 }
