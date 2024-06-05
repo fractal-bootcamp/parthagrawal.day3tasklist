@@ -82,26 +82,14 @@ function TaskList() {
   const [tasks, setTasks] = useState(initialTasks);
 
 
-  // function updateTask(updateIdx: number) {
-  //   const targetTask = tasks.find((element) => { element. })
-
-  // }
-
-  // does this run every time? 
-
   const mapTaskToTaskComponent = (task: Task, index: number) => {
     function updateTask(updateIdx: number) {
-
-      // update the index 
-      if (index === updateIdx) {
-        task.completed = !task.completed
-      }
+      const oldTask = tasks[updateIdx]
+      debugger;
+      const newTask = { ...oldTask, completed: !oldTask.completed }
 
       // create a new array to hold updated tasks
-      const newTasks = tasks
-
-      // update the new task array to hold the flipped task 
-      newTasks[index] = task
+      const newTasks = tasks.map((task, taskIndex) => index === taskIndex ? newTask : task)
 
       // update state of the tasks arrray
       setTasks(newTasks)
@@ -110,12 +98,9 @@ function TaskList() {
     return <TaskComponent task={task} onToggle={() => { updateTask(index) }} />
   }
 
-
-
-
   return (
     <div className="bg-red-500">
-      {initialTasks.map(mapTaskToTaskComponent)}
+      {tasks.map(mapTaskToTaskComponent)}
     </div >
   )
 }
