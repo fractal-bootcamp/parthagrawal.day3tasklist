@@ -50,6 +50,8 @@ const Task = ({ task }: TaskProps) => {
 
 }
 
+// oops
+
 const mapTaskToTaskComponent = (task: Task) => <TaskComponent task={task} />;
 
 // NOTE: THIS COMPONENT MUST MUST MUST BE PASSED a TASK and a HELLO
